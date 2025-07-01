@@ -221,7 +221,7 @@ async def update_variables():
                 drives_ids.append(temp[1])
                 drives_names.append(temp[0].replace("_", " "))
                 if len(temp) > 2:
-                    index_urls.append(temp[2].strip("/"))
+                    index_urls.append(temp[2])
                 else:
                     index_urls.append("")
 
@@ -234,7 +234,7 @@ async def load_configurations():
 
     await (
         await create_subprocess_shell(
-            "chmod 600 .netrc && cp .netrc /root/.netrc && chmod +x aria-nox-nzb.sh && ./aria-nox-nzb.sh"
+            "cp .netrc /usr/src/app/tmp/.netrc && bash aria-nox-nzb.sh"
         )
     ).wait()
 

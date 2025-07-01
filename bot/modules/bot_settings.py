@@ -281,9 +281,9 @@ async def edit_variable(_, message, pre_message, key):
             drives_ids.insert(0, value)
     elif key == "INDEX_URL":
         if drives_names and drives_names[0] == "Main":
-            index_urls[0] = value.strip("/")
+            index_urls[0] = value
         else:
-            index_urls.insert(0, value.strip("/"))
+            index_urls.insert(0, value)
     elif key == "AUTHORIZED_CHATS":
         aid = value.split()
         auth_chats.clear()
@@ -451,8 +451,7 @@ async def update_private_file(_, message, pre_message):
             await database.update_config({"USE_SERVICE_ACCOUNTS": False})
         elif file_name in [".netrc", "netrc"]:
             await (await create_subprocess_exec("touch", ".netrc")).wait()
-            await (await create_subprocess_exec("chmod", "600", ".netrc")).wait()
-            await (await create_subprocess_exec("cp", ".netrc", "/root/.netrc")).wait()
+            await (await create_subprocess_exec("cp", ".netrc", "/usr/src/app/tmp/.netrc")).wait()
         await delete_message(message)
     elif doc := message.document:
         file_name = doc.file_name
@@ -488,15 +487,14 @@ async def update_private_file(_, message, pre_message):
                     drives_ids.append(temp[1])
                     drives_names.append(temp[0].replace("_", " "))
                     if len(temp) > 2:
-                        index_urls.append(temp[2].strip("/"))
+                        index_urls.append(temp[2])
                     else:
                         index_urls.append("")
         elif file_name in [".netrc", "netrc"]:
             if file_name == "netrc":
                 await rename("netrc", ".netrc")
                 file_name = ".netrc"
-            await (await create_subprocess_exec("chmod", "600", ".netrc")).wait()
-            await (await create_subprocess_exec("cp", ".netrc", "/root/.netrc")).wait()
+            await (await create_subprocess_exec("cp", ".netrc", "/usr/src/app/tmp/.netrc")).wait()
         elif file_name == "config.py":
             await load_config()
         if "@github.com" in Config.UPSTREAM_REPO:
